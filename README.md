@@ -20,7 +20,6 @@ A lightweight, TypeScript-first library for **safe and functional string manipul
   - [Unicode Operations](#unicode-operations)
 - [Examples](#examples)
 - [Testing](#testing)
-- [Contributing](#contributing)
 - [License](#license)
 
 ---
