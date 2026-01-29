@@ -1,0 +1,58 @@
+{
+  "name": "string-extn",
+  "version": "1.0.0",
+  "description": "A lightweight, TypeScript-first library for safe and functional string manipulation with core utilities, functional programming helpers, and Unicode-safe operations.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "string",
+    "utility",
+    "functional",
+    "unicode",
+    "typescript",
+    "string-manipulation",
+    "validation",
+    "slug",
+    "case-conversion",
+    "string-masking"
+  ],
+  "author": "Balaji Katta Venkatarathnam",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/balaji-kv/string-extn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/balaji-kv/string-extn/issues"
+  },
+  "homepage": "https://github.com/balaji-kv/string-extn#readme",
+  "dependencies": {
+    "grapheme-splitter": "^1.0.4",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "glob": "^10.3.10"
+  },
+  "overrides": {
+    "glob": "^10.3.10",
+    "inflight": {
+      "glob": "^10.3.10"
+    }
+  }
+}
