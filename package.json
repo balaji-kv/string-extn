@@ -1,13 +1,16 @@
 {
   "name": "string-extn",
-  "version": "1.0.0",
-  "description": "A lightweight, TypeScript-first library for safe and functional string manipulation with core utilities, functional programming helpers, and Unicode-safe operations.",
+  "version": "1.0.1",
+  "description": "Extended string utility functions for JavaScript and TypeScript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest",
     "prepublishOnly": "npm run build && npm test"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "string",
