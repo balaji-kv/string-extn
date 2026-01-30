@@ -1,63 +1,69 @@
-# Workflow: Build, bump version, and publish string-extn to npm
-# Works with npm Automation Token (2FA safe)
+# Workflow: Build, sync version, and publish string-extn to npm
+# Safe with npm Automation Token and 2FA
 
 name: Publish string-extn to npm
 
 on:
   push:
     tags:
-      - 'v*'  # Trigger on tags like v1.0.1
+      - 'v*'  # Trigger only on version tags like v1.0.8
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repository
+      # 1️⃣ Checkout repository
       - uses: actions/checkout@v4
 
-      # Set up Node.js
+      # 2️⃣ Setup Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
+          registry-url: https://registry.npmjs.org
 
-      # Install dependencies
+      # 3️⃣ Install dependencies
       - run: npm ci
 
-      # Run tests
+      # 4️⃣ Run tests
       - run: npm test
 
-      # Build project
+      # 5️⃣ Build the project
       - run: npm run build
 
-  publish-npm:
+  publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # Checkout repo again (needed for publish)
+      # 1️⃣ Checkout repository again
       - uses: actions/checkout@v4
 
-      # Set up Node.js with npm registry
+      # 2️⃣ Setup Node.js for publishing
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org
           cache: 'npm'
 
-      # Install dependencies
+      # 3️⃣ Install dependencies
       - run: npm ci
 
-      # Optional: Ensure package.json version matches tag
+      # 4️⃣ Sync package.json version with tag (skip if already matching)
       - name: Sync version with tag
         run: |
-          TAG_VERSION=${GITHUB_REF#refs/tags/}  # Extract tag (v1.0.1)
+          TAG_VERSION=${GITHUB_REF#refs/tags/}        # e.g., v1.0.8
+          VERSION=${TAG_VERSION#v}                    # remove leading 'v'
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
           echo "Tag version: $TAG_VERSION"
-          # Remove leading 'v' from tag
-          VERSION=${TAG_VERSION#v}
-          echo "Syncing package.json version to $VERSION"
-          npm version $VERSION --no-git-tag-version
+          echo "Current package.json version: $CURRENT_VERSION"
+          if [ "$CURRENT_VERSION" != "$VERSION" ]; then
+            echo "Updating package.json version to $VERSION"
+            npm version $VERSION --no-git-tag-version
+          else
+            echo "Version already matches tag, skipping npm version"
+          fi
 
-      # Publish to npm using Automation Token
+      # 5️⃣ Publish package using npm Automation Token
       - name: Publish package
         run: npm publish --access public
         env:
