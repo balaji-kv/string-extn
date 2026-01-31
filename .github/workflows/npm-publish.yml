@@ -8,6 +8,10 @@ on:
     tags:
       - 'v*'  # Trigger only on version tags like v1.0.8
 
+permissions:
+  contents: read
+  id-token: write  # Required for provenance
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -63,8 +67,8 @@ jobs:
             echo "Version already matches tag, skipping npm version"
           fi
 
-      # 5️⃣ Publish package using npm Automation Token
+      # Publish package using provenance
       - name: Publish package
-        run: npm publish --access public
+        run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
