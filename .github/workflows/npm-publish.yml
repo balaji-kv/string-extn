@@ -9,8 +9,8 @@ on:
       - 'v*'  # Trigger only on version tags like v1.0.8
 
 permissions:
-  contents: read
-  id-token: write  # Required for provenance
+  contents: write 
+  id-token: write
 
 jobs:
   build:
@@ -67,7 +67,7 @@ jobs:
             echo "Version already matches tag, skipping npm version"
           fi
 
-      # Publish package using provenance
+      # 5 Publish package using provenance
       - name: Publish package
         run: npm publish --provenance --access public
         env:
@@ -78,5 +78,3 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
