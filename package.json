@@ -1,6 +1,6 @@
 {
   "name": "string-extn",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Extended string utility functions for JavaScript and TypeScript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
