@@ -7,3 +7,7 @@ export * from './mask.js';
 export * from './similarity.js';
 export * from './diff.js';
 export * from './validate.js';
+export * from './intl.js';
+export * from './perf.js';
+export * from './security.js';
+export * from './stream.js';

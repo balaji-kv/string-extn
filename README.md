@@ -18,6 +18,10 @@ A lightweight, TypeScript-first library for **safe and functional string manipul
   - [URL & Filename Safe Conversion](#url--filename-safe-conversion)
   - [String Validation](#string-validation)
   - [Unicode Operations](#unicode-operations)
+  - [Internationalization](#internationalization)
+  - [Security & Sanitization](#security--sanitization)
+  - [Performance Helpers](#performance-helpers)
+  - [Stream Utilities](#stream-utilities)
 - [Examples](#examples)
 - [Testing](#testing)
 - [License](#license)
@@ -68,6 +72,23 @@ A lightweight, TypeScript-first library for **safe and functional string manipul
 - **lengthUnicode** - Count Unicode grapheme clusters (handles emoji with modifiers)
 - **unicodeSlice** - Slice strings while respecting grapheme boundaries
 - **reverseUnicode** - Reverse strings with proper emoji and combining mark support
+
+### 🌐 Internationalization
+- **localeCompare** - Locale-aware string comparison with configurable sensitivity
+- **normalizeUnicode** - Normalize strings to NFC/NFD/NFKC/NFKD
+
+### 🔐 Security & Sanitization
+- **escapeHTML** - Escape HTML-reserved characters
+- **escapeSQL** - Escape SQL-sensitive characters
+- **sanitizePath** - Remove traversal and dot segments from paths
+
+### ⚡ Performance Helpers
+- **fastRepeat** - Repeat strings using a fast doubling approach
+- **fastPadLeft** - Left-pad strings using fast repeat
+
+### 🌊 Stream Utilities
+- **chunkString** - Split strings into fixed-size chunks
+- **streamTransform** - Transform chunks and concatenate results
 
 ---
 
@@ -211,6 +232,35 @@ reverseUnicode(emojiStr);         // "👍👍🏽"
 | `unicodeSlice` | `unicodeSlice(str: string, start: number, end?: number): string` | Slices by grapheme boundaries |
 | `reverseUnicode` | `reverseUnicode(str: string): string` | Reverses with emoji/modifier support |
 
+### Internationalization
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `localeCompare` | `localeCompare(a: string, b: string, locale?: string, sensitivity?: "base" | "accent" | "case" | "variant"): number` | Locale-aware string comparison |
+| `normalizeUnicode` | `normalizeUnicode(input: string, form?: "NFC" | "NFD" | "NFKC" | "NFKD"): string` | Unicode normalization |
+
+### Security & Sanitization
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `escapeHTML` | `escapeHTML(input: string): string` | Escapes HTML-reserved characters |
+| `escapeSQL` | `escapeSQL(input: string): string` | Escapes SQL-sensitive characters |
+| `sanitizePath` | `sanitizePath(input: string): string` | Removes traversal and dot segments |
+
+### Performance Helpers
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `fastRepeat` | `fastRepeat(input: string, count: number): string` | Fast string repetition |
+| `fastPadLeft` | `fastPadLeft(input: string, length: number, char?: string): string` | Fast left padding |
+
+### Stream Utilities
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `chunkString` | `chunkString(input: string, size: number): string[]` | Split string into chunks |
+| `streamTransform` | `streamTransform(chunks: string[], transformer: (chunk: string) => string): string` | Transform and concatenate |
+
 ---
 
 ## Examples
@@ -307,7 +357,30 @@ console.log(unicodeSlice(message, 6, 8)); // "👨‍👩‍👧‍👦 "
 console.log(reverseUnicode(message)); // Preserves emoji integrity
 ```
 
-### Example 3: Function Composition
+### Example 8: Internationalization and Security
+
+```typescript
+import { localeCompare, normalizeUnicode, escapeHTML, sanitizePath } from 'string-extn';
+
+console.log(localeCompare('resume', 'résumé', 'en', 'accent')); // Non-zero
+console.log(normalizeUnicode('e\u0301', 'NFC')); // "\u00e9"
+console.log(escapeHTML('<script>alert(1)</script>')); // Escaped HTML entities
+console.log(sanitizePath('/var/../tmp')); // "/var/tmp"
+```
+
+### Example 9: Performance and Streams
+
+```typescript
+import { fastRepeat, fastPadLeft, chunkString, streamTransform } from 'string-extn';
+
+console.log(fastRepeat('ab', 4)); // "abababab"
+console.log(fastPadLeft('7', 3, '0')); // "007"
+
+const chunks = chunkString('abcdef', 2); // ["ab", "cd", "ef"]
+console.log(streamTransform(chunks, c => c.toUpperCase())); // "ABCDEF"
+```
+
+### Example 10: Function Composition
 
 ```typescript
 import { compose } from 'string-extn';
