@@ -22,6 +22,10 @@ A lightweight, TypeScript-first library for **safe and functional string manipul
   - [Security & Sanitization](#security--sanitization)
   - [Performance Helpers](#performance-helpers)
   - [Stream Utilities](#stream-utilities)
+  - [Chaining & Fluent API](#chaining--fluent-api)
+  - [Lazy Evaluation](#lazy-evaluation)
+  - [Template Interpolation](#template-interpolation)
+  - [Plugin System](#plugin-system)
 - [Examples](#examples)
 - [Testing](#testing)
 - [License](#license)
@@ -90,6 +94,22 @@ A lightweight, TypeScript-first library for **safe and functional string manipul
 - **chunkString** - Split strings into fixed-size chunks
 - **streamTransform** - Transform chunks and concatenate results
 
+### 🔗 Chaining & Fluent API
+- **chain** - Create chainable string transformations
+- **StringChain** - Fluent wrapper with trim, case, replace, and reverse
+
+### 💤 Lazy Evaluation
+- **lazy** - Build lazy transformation pipelines
+- **LazyString** - Deferred execution via `execute()`
+
+### 🧩 Template Interpolation
+- **template** - Replace {{key}} placeholders from a variable map
+
+### 🧩 Plugin System
+- **registerPlugin** - Register a named string plugin
+- **runPlugin** - Execute a registered plugin
+- **listPlugins** - List registered plugin names
+
 ---
 
 ## Installation
@@ -143,6 +163,48 @@ const emojiStr = '👍🏽👍';
 lengthUnicode(emojiStr);          // 2 (counts emoji with skin tone as 1)
 unicodeSlice(emojiStr, 0, 1);     // "👍🏽"
 reverseUnicode(emojiStr);         // "👍👍🏽"
+```
+
+### Chaining & Lazy Evaluation
+
+```typescript
+import { chain, lazy } from 'string-extn';
+
+const chained = chain('  Hello  ')
+  .trim()
+  .toLower()
+  .replace('hello', 'hi')
+  .reverse()
+  .valueOf();
+// "ih"
+
+const pipeline = lazy('  Hello  ')
+  .trim()
+  .toUpper();
+
+pipeline.execute(); // "HELLO"
+```
+
+### Template Interpolation
+
+```typescript
+import { template } from 'string-extn';
+
+template('Hello {{name}}', { name: 'Ada' }); // "Hello Ada"
+```
+
+### Plugin System
+
+```typescript
+import { registerPlugin, runPlugin, listPlugins } from 'string-extn';
+
+registerPlugin({
+  name: 'wrap',
+  fn: (input, left: string, right: string) => `${left}${input}${right}`
+});
+
+runPlugin('wrap', 'core', '[', ']'); // "[core]"
+listPlugins(); // ["wrap"]
 ```
 
 ---
@@ -260,6 +322,44 @@ reverseUnicode(emojiStr);         // "👍👍🏽"
 |----------|-----------|-------------|
 | `chunkString` | `chunkString(input: string, size: number): string[]` | Split string into chunks |
 | `streamTransform` | `streamTransform(chunks: string[], transformer: (chunk: string) => string): string` | Transform and concatenate |
+
+### Chaining & Fluent API
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `chain` | `chain(input: string): StringChain` | Create a chainable string wrapper |
+| `StringChain#trim` | `trim(): this` | Trim leading/trailing whitespace |
+| `StringChain#toUpper` | `toUpper(): this` | Uppercase with default locale rules |
+| `StringChain#toLower` | `toLower(): this` | Lowercase with default locale rules |
+| `StringChain#replace` | `replace(search: string | RegExp, replacement: string): this` | Replace with string or RegExp |
+| `StringChain#reverse` | `reverse(): this` | Reverse by Unicode code points |
+| `StringChain#valueOf` | `valueOf(): string` | Get the current value |
+| `StringChain#toString` | `toString(): string` | String coercion output |
+
+### Lazy Evaluation
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `lazy` | `lazy(input: string): LazyString` | Create a lazy string wrapper |
+| `LazyString#map` | `map(fn: (input: string) => string): this` | Register a deferred transform |
+| `LazyString#trim` | `trim(): this` | Register a trim operation |
+| `LazyString#toUpper` | `toUpper(): this` | Register uppercase conversion |
+| `LazyString#toLower` | `toLower(): this` | Register lowercase conversion |
+| `LazyString#execute` | `execute(): string` | Execute all operations in order |
+
+### Template Interpolation
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `template` | `template(input: string, variables: Record<string, any>): string` | Replace {{key}} placeholders |
+
+### Plugin System
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `registerPlugin` | `registerPlugin(plugin: StringExtnPlugin): void` | Register a named plugin |
+| `runPlugin` | `runPlugin(name: string, input: string, ...args: any[]): string` | Execute a plugin by name |
+| `listPlugins` | `listPlugins(): string[]` | List registered plugin names |
 
 ---
 

@@ -11,3 +11,6 @@ export * from './intl.js';
 export * from './perf.js';
 export * from './security.js';
 export * from './stream.js';
+export * from './chain.js';
+export * from './lazy.js';
+export * from './plugin.js';
